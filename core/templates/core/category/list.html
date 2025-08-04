@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="mt-4">Category List</h2>
+<a href="{% url 'category_create' %}" class="btn btn-yellow mb-3">Create New Category</a>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Is Active?</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td>{{ category.title }}</td>
+                <td>{{ category.description|default:"—" }}</td>
+                <td>{{ category.is_active|yesno:"Yes,No" }}</td>
+                <td>
+                    <a href="{% url 'category_detail' category.pk %}" class="btn btn-sm btn-yellow">View</a>
+                    <a href="{% url 'category_update' category.pk %}" class="btn btn-sm btn-outline-black">Edit</a>
+                    <a href="{% url 'category_delete' category.pk %}" class="btn btn-sm btn-outline-black">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<h2 class="mt-5">Course List</h2>
+<a href="{% url 'course_create' %}" class="btn btn-yellow mb-3">Create New Course</a>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Title</th>
+                <th>Instructors</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in courses %}
+            <tr>
+                <td>{{ course.title }}</td>
+                <td>
+                    {% for instructor in course.instructors.all %}
+                        {{ instructor.username }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        <em>No instructor assigned</em>
+                    {% endfor %}
+                </td>
+                <td>{{ course.category.title }}</td>
+                <td>{{ course.description|truncatewords:10 }}</td>
+                <td>
+                <div class="btn-group" role="group" aria-label="Actions">
+                    <a href="{% url 'course_detail' course.pk %}" class="btn btn-sm btn-yellow">View</a>
+                    <a href="{% url 'course_update' course.pk %}" class="btn btn-sm btn-outline-black">Edit</a>
+                    <a href="{% url 'course_delete' course.pk %}" class="btn btn-sm btn-outline-black">Delete</a>
+                </div>
+            </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

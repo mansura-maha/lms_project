@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ course.title }}</h2>
+
+    <p><strong>Description:</strong> {{ course.description }}</p>
+    <p><strong>Price:</strong> ${{ course.price }}</p>
+    <p><strong>Duration:</strong> {{ course.duration }}</p>
+    <p><strong>Category:</strong> {{ course.category.title }}</p>
+    <p><strong>Instructors:</strong>
+        {% for instructor in course.instructors.all %}
+            {{ instructor.username }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+            <em>No instructors assigned</em>
+        {% endfor %}
+    </p>
+    <p><strong>Active:</strong> {{ course.is_active|yesno:"Yes,No" }}</p>
+
+    <a href="{% url 'course_update' course.pk %}" class="btn btn-outline-primary">Edit</a>
+    <a href="{% url 'course_delete' course.pk %}" class="btn btn-outline-danger">Delete</a>
+    <a href="{% url 'course_list' %}" class="btn btn-secondary">Back to Course List</a>
+</div>
+{% endblock %}

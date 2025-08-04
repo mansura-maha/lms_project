@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ category.title }}</h2>
+
+    <p><strong>Description:</strong> {{ category.description }}</p>
+    <p><strong>Active:</strong> {{ category.is_active|yesno:"Yes,No" }}</p>
+
+    <h4 class="mt-4">Courses in this Category:</h4>
+    <ul>
+        {% for course in category.course_set.all %}
+            <li><a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a></li>
+        {% empty %}
+            <li><em>No courses in this category</em></li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'category_update' category.pk %}" class="btn btn-outline-primary">Edit</a>
+    <a href="{% url 'category_delete' category.pk %}" class="btn btn-outline-danger">Delete</a>
+    <a href="{% url 'category_list' %}" class="btn btn-secondary">Back to Category List</a>
+</div>
+{% endblock %}

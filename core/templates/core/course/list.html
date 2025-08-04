@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mt-4">Course List</h2>
+<a href="{% url 'course_create' %}" class="btn btn-yellow mb-3">Create New Course</a>
+
+<table class="table table-bordered table-striped table-fixed">
+    <thead class="table-dark">
+        <tr>
+            <th class="col-title">Title</th>
+            <th class="col-instructors">Instructors</th>
+            <th class="col-category">Category</th>
+            <th class="col-price">Price</th>
+            <th class="col-active">Is Active?</th>
+            <th class="col-actions">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for course in courses %}
+        <tr>
+            <td class="truncate-ellipsis" title="{{ course.title }}">{{ course.title }}</td>
+            <td class="truncate-ellipsis" title="{% for instructor in course.instructors.all %}{{ instructor.username }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+                {% for instructor in course.instructors.all %}
+                    {{ instructor.username }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    <em>No instructor</em>
+                {% endfor %}
+            </td>
+            <td>{{ course.category.title }}</td>
+            <td>${{ course.price }}</td>
+            <td class="text-center">{{ course.is_active|yesno:"Yes,No" }}</td>
+            <td>
+                <div class="btn-group" role="group" aria-label="Actions">
+                    <a href="{% url 'course_detail' course.pk %}" class="btn btn-sm btn-yellow">View</a>
+                    <a href="{% url 'course_update' course.pk %}" class="btn btn-sm btn-outline-black">Edit</a>
+                    <a href="{% url 'course_delete' course.pk %}" class="btn btn-sm btn-outline-black">Delete</a>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
